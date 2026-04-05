@@ -6,7 +6,7 @@ import time
 import os
 
 API = "https://discord.com/api/v9/unique-username/username-attempt-unauthed"
-WEBHOOK = os.getenv("WEBHOOK_URL")
+WEBHOOK = "https://discord.com/api/webhooks/1490243245198807133/zqmeds9xpArPDcLh9VsyST6bSSp7EVOr2OWH9D6Zj-kIhp-qvyyKyT8XHuBa6FrdpRYi"
 
 THREADS = 1
 COOLDOWN = 1.5
