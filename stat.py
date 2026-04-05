@@ -9,7 +9,7 @@ API = "https://discord.com/api/v9/unique-username/username-attempt-unauthed"
 WEBHOOK = "https://discord.com/api/webhooks/1490243245198807133/zqmeds9xpArPDcLh9VsyST6bSSp7EVOr2OWH9D6Zj-kIhp-qvyyKyT8XHuBa6FrdpRYi"
 
 THREADS = 1
-COOLDOWN = 1.5
+COOLDOWN = 10
 MAX_RETRIES = 5
 
 # load usernames
