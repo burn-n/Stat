@@ -115,10 +115,10 @@ def check(name):
 def worker():
     while True:
         try:
-            name = q.get(timeout=3)
+            name = random_name()
         except queue.Empty:
             return
-
+        
         check(name)
         q.task_done()
 
