@@ -115,7 +115,7 @@ def check(name):
 def worker():
     while True:
         try:
-            name = random_name()
+            name = generate_names()
         except queue.Empty:
             return
         
