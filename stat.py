@@ -5,12 +5,13 @@ import itertools
 import time
 import string
 import sys
+import random
 
 API = "https://discord.com/api/v9/unique-username/username-attempt-unauthed"
 WEBHOOK = "https://discord.com/api/webhooks/1508590349713408231/CIljNz9hoywwrkH9ZJ7cjWVwUi5gogPNdGlWXzYucncqQb13qZZpB6D-Vi6wCSaeZ4WT"
 
-THREADS = 1
-COOLDOWN = 10
+THREADS = 5
+COOLDOWN = 15
 MAX_RETRIES = 5
 
 CHARS = string.ascii_lowercase + string.digits + "_" + "."
@@ -26,29 +27,29 @@ proxy_cycle = itertools.cycle(proxies) if proxies else None
 use_proxies = False
 
 request_lock = threading.Lock()
-q = queue.Queue()
+
+checked = set()
+checked_lock = threading.Lock()
 
 
 def log(msg):
-    """
-    Flush instantly so GitHub Actions shows logs live
-    """
     print(msg, flush=True)
     sys.stdout.flush()
 
 
-# generate 3 and 4 character usernames
-def generate_names():
-    for length in [3, 4]:
-        for combo in itertools.product(CHARS, repeat=length):
-            yield ''.join(combo)
-
-
-for name in generate_names():
-    q.put(name)
-
-log(f"[INIT] Loaded {q.qsize()} usernames")
 log(f"[INIT] Loaded {len(proxies)} proxies")
+
+
+def generate_random_username():
+    while True:
+        length = random.choice([3, 4])
+
+        name = ''.join(random.choice(CHARS) for _ in range(length))
+
+        with checked_lock:
+            if name not in checked:
+                checked.add(name)
+                return name
 
 
 def send_webhook(name):
@@ -150,17 +151,11 @@ def check(name):
 
 def worker():
     while True:
-        try:
-            name = q.get_nowait()
-        except queue.Empty:
-            log("[THREAD] Queue empty, exiting")
-            return
+        name = generate_random_username()
 
         check(name)
 
-        q.task_done()
-
-        log(f"[PROGRESS] Remaining: {q.qsize()}")
+        log(f"[TOTAL CHECKED] {len(checked)}")
 
 
 # start threads
@@ -170,6 +165,7 @@ log(f"[START] Launching {THREADS} thread(s)")
 
 for i in range(THREADS):
     t = threading.Thread(target=worker, name=f"worker-{i}")
+    t.daemon = True
     t.start()
 
     log(f"[THREAD STARTED] worker-{i}")
