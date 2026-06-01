@@ -15,7 +15,7 @@ COOLDOWN_MIN = 7
 COOLDOWN_MAX = 16
 MAX_RETRIES = 5
 
-CHARS = string.ascii_lowercase + string.digits + "_" + "."
+CHARS = string.ascii_lowercase + "_" + "."
 
 request_lock = threading.Lock()
 checked_lock = threading.Lock()
@@ -54,7 +54,7 @@ log("[INIT] Username checker started")
 
 def generate_random_username():
     while True:
-        length = random.choice([3])
+        length = random.choice([4])
 
         name = ''.join(random.choice(CHARS) for _ in range(length))
 
