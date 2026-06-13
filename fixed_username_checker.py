@@ -32,7 +32,7 @@ def send_webhook(name):
     try:
         payload = {
             "content": f"✅ **Available Username Found!**\n`{name}`\n<@&1466285392717414400>",
-            "allowed_mentions": {"parse": ["everyone"]}
+            "allowed_mentions": {"roles": "1466285392717414400"}
         }
         response = session.post(WEBHOOK, json=payload, timeout=10)
         if response.status_code in (200, 204):
