@@ -26,19 +26,26 @@ def log(msg):
     print(msg, flush=True)
 
 def send_webhook(name):
-    """Send available username to Discord webhook"""
     if not WEBHOOK:
         return
+
+    ROLE_ID = "1466285392717414400"  # your role ID
+
     try:
         payload = {
-            "content": f"✅ **Available Username Found!**\n`{name}`\n<@&1466285392717414400>",
-            "allowed_mentions": {"roles": "1466285392717414400"}
+            "content": f"✅ **Available Username Found!**\n`{name}`\n<@&{ROLE_ID}>",
+            "allowed_mentions": {
+                "roles": [ROLE_ID]
+            }
         }
+
         response = session.post(WEBHOOK, json=payload, timeout=10)
+
         if response.status_code in (200, 204):
             log(f"[WEBHOOK] ✅ Sent hit: {name}")
         else:
             log(f"[WEBHOOK] Failed: {response.status_code}")
+
     except Exception as e:
         log(f"[WEBHOOK ERROR] {e}")
 
