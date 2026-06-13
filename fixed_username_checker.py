@@ -31,7 +31,7 @@ def send_webhook(name):
         return
     try:
         payload = {
-            "content": f"✅ **Available Username Found!**\n`{name}`\n@everyone",
+            "content": f"✅ **Available Username Found!**\n`{name}`\n<@&1466285392717414400>",
             "allowed_mentions": {"parse": ["everyone"]}
         }
         response = session.post(WEBHOOK, json=payload, timeout=10)
